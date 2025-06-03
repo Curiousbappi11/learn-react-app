@@ -252,6 +252,7 @@ export default App
 ```
 
 ### Explanation of App.jsx
+
 This code does the following:
 1. **Imports**:
    - `useState`: A React hook for managing state in functional components.
