@@ -204,22 +204,6 @@ This code does the following:
 
 ---
 
-### ✅ ~~Deprecated~~ Example (React 18+)
-
-```jsx
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
-```
-
-> 🆕 In React 18+, `createRoot()` is used instead of `ReactDOM.render()` (which is now deprecated).
-
----
-
-
 ### 📌 Where It's Used
 
 In a typical React project:
