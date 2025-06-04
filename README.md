@@ -192,7 +192,7 @@ This code does the following:
 
 1. **Imports**:
    - `StrictMode`: A tool for highlighting potential problems in an application.
-   - `createRoot`: A method from `react-dom/client` to create a root for rendering React components.
+   - `createRoot`: A method from `react-dom/client` to create a root for concurrent rendering React components.
    - `App`: The main application component. it is called like a function to render the main component of the application.
    
 2. **Renders the App Component**:
@@ -260,6 +260,7 @@ This code does the following:
 2. **Defines the App Component**:
     - The `App` function is defined as a functional component.
     - It is returning a fragment (`<>...</>`) containing a simple `<h1>` element with the text "hello!".
+    - End of the day elements inside the return statement are converted into a tree of React elements, which React uses to render the UI.
     - Simply we can say that App.jsx is functional component that returns a simple JSX element.
 3. **Exports the App Component**:
     - The `App` component is exported as the default export of the module, making it available for import in other files.
@@ -323,4 +324,126 @@ Vite is a powerful build tool that provides a fast and efficient development exp
 ## Additional Resources
 - [Vite Documentation](https://vitejs.dev/guide/)
 - [React Documentation](https://reactjs.org/docs/getting-started.html)
+
+## Create your own react library and JSX
+
+### index.html
+```html
+<!DOCTYPE html>
+<html lang="en" style="background: #262626;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="root"></div>
+    <script src="./customReact.js"></script>
+</body>
+</html>
+```
+This HTML file sets up a basic structure with a root `<div>` where the React component will be rendered. It also includes a script tag to load the custom React library.
+
+### customReact.js
+```javascript
+
+HTMLElement.prototype.customRender = function(reactElement) {
+    let element = document.createElement(reactElement.type);
+    element.innerHTML = reactElement.children;
+    for (const key in reactElement.props) {
+        element.setAttribute(key, reactElement.props[key]);
+    }
+    this.appendChild(element);
+}
+
+const reactElement = {
+    type: 'a',
+    props: {
+        href: 'https://react.dev',
+        target : '_blank'
+    },
+    children: 'Visit React'
+}
+
+const mainContainer = document.querySelector('#root');
+
+mainContainer.customRender(reactElement);
+```
+
+This JavaScript file defines a custom `customRender` method on the `HTMLElement` prototype, allowing you to render a simple React-like element. It creates an HTML element based on the provided `reactElement` object and appends it to the specified container.
+
+### Explanation of customReact.js
+1. **`HTMLElement.prototype.customRender`**: This method extends the `HTMLElement` prototype to add a custom rendering function. It takes a `reactElement` object, creates an HTML element based on its type, sets its attributes, and appends it to the current element.
+2. **`reactElement` Object**: This object represents a simple React-like element with a type, props, and children. In this case, it creates an anchor (`<a>`) element with a link to the React documentation.
+3. **`mainContainer.customRender(reactElement)`**: This line selects the root container (`#root`) and calls the `customRender` method to render the `reactElement` inside it.
+
+### Result
+When you open the `index.html` file in a web browser, it will render an anchor element with the text "Visit React" that links to the React documentation. This demonstrates a very basic implementation of a custom React-like rendering system using JavaScript.
+
+### Under the Hood
+- Every React JSX components is not valid JavaScript, it is converted by Babel or esbuild into React.createElement calls.
+
+```JSX
+<a href="https://react.dev" target="_blank">Visit React</a>
+```
+**to ->**
+```javascript
+// as this
+React.createElement(
+    'a',
+    { href: 'https://react.dev', target: '_blank' },
+    'Visit React'
+);
+```
+
+**or same as**
+
+```javascript
+// like this
+const reactElement = {
+    type: 'a',
+    props: {
+        href: 'https://react.dev',
+        target : '_blank'
+    },
+    children: 'Visit React'
+}
+```
+- The `customRender` method mimics the behavior of React's rendering process by creating an HTML element, setting its attributes, and appending it to the DOM.
+
+### **`.createElement()`**
+
+```JSX
+import { createElement, StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+// import './index.css'
+import App from './App.jsx'
+
+const user = 'John Doe';
+
+const reactElement = createElement(
+  // type of the element
+  'a', 
+  // props of the element
+  { href: 'https://react.dev', target: '_blank' }, 
+  // children of the element
+  'Visit React',
+  // or you can use a variable
+  user 
+  
+)
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <App />
+    {reactElement}
+  </StrictMode>,
+)
+```
+`reactElement` should be enclosed in curly braces `{}` called as **evaluated expression**, when used inside JSX, as it is a JavaScript expression. otherwise, it will be treated as a string literal.
+
+> Evaluated expressions does not allow to use `if` statements, `for` loops, or any other control flow statements directly inside JSX. Instead, you can use ternary operators or logical operators to conditionally render elements.
+
+
+
 
