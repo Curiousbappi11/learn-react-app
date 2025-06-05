@@ -75,6 +75,7 @@ export default defineConfig({
 ```
 
 ## `package.json`
+
 The `package.json` file is a JSON file that contains metadata about the project, including its dependencies, scripts, and other configurations. It typically includes fields such as `name`, `version`, **`dependencies`**, **`scripts`**, `devdependencies`.
 
 > The `package.json` file is a crucial part of any Node.js project, including React applications. It contains metadata about the project and its dependencies.
@@ -164,9 +165,11 @@ The `index.html` file is the main HTML file that serves as the entry point for t
 </body>
 </html>
 ```
+
 The `<div id="root"></div>` is where the React application will be mounted. The `<script type="module" src="/src/main.jsx"></script>` line includes the main JavaScript file that initializes the React application.
 
 ### Why module is used in script tag?
+
 > The `type="module"` attribute in the `<script>` tag indicates that the script should be treated as a JavaScript module. This allows you to use modern JavaScript features like `import` and `export` within the script, enabling better modularity and code organization. It also allows for asynchronous loading of the script, improving performance in web applications.
 
 ## main.jsx
@@ -188,6 +191,7 @@ createRoot(document.getElementById('root')).render(
 ```
 
 ### Explanation of main.jsx
+
 This code does the following:
 
 1. **Imports**:
@@ -200,6 +204,7 @@ This code does the following:
     - The `App` component is rendered inside a `StrictMode` wrapper, which helps identify potential issues in the application.
 
 ### 📝 Note on StrictMode
+
 `StrictMode` is a tool for highlighting potential problems in an application. It activates additional checks and warnings for its descendants, helping developers identify issues early in the development process.
 
 ---
@@ -254,6 +259,7 @@ export default App
 ### Explanation of App.jsx
 
 This code does the following:
+
 1. **Imports**:
    - `useState`: A React hook for managing state in functional components.
    - The `App.css` file is commented out, but it can be used to style the component.
@@ -297,30 +303,42 @@ body {
 }
 /* Reset styles for all elements */
 ```
+
 This code sets the default styles for the body, including margin, font family, and font smoothing. It also applies a box-sizing rule to all elements to ensure consistent sizing behavior.
+
 ## Running the Application
+
 To run the Vite React application, you can use the following command:
 
 ```bash
 npm run dev
 ```
+
 This command starts the development server, and you can access the application in your web browser at `http://localhost:5173` (or the port specified in the terminal).
+
 ## Building the Application
+
 To build the Vite React application for production, you can use the following command:
 
 ```bash
 npm run build
 ```
 This command compiles the application into optimized static files that can be deployed to a web server. The output will be placed in the `dist` directory, which you can then serve using a static file server or deploy to a hosting service.
+
 ## Previewing the Built Application
+
 To preview the built application, you can use the following command:
 
 ```bash
 npm run preview
 ```
+
 This command starts a local server to serve the built application from the `dist` directory. You can access the preview in your web browser at `http://localhost:4173` (or the port specified in the terminal).
+
 ## Conclusion
+
 Vite is a powerful build tool that provides a fast and efficient development experience for React applications. By using Vite, you can take advantage of features like instant module reloading, optimized builds, and a simple configuration process. The project structure and configuration files make it easy to get started with building modern web applications using React and Vite.
+
 ## Additional Resources
 - [Vite Documentation](https://vitejs.dev/guide/)
 - [React Documentation](https://reactjs.org/docs/getting-started.html)
@@ -342,11 +360,12 @@ Vite is a powerful build tool that provides a fast and efficient development exp
 </body>
 </html>
 ```
+
 This HTML file sets up a basic structure with a root `<div>` where the React component will be rendered. It also includes a script tag to load the custom React library.
 
 ### customReact.js
-```javascript
 
+```javascript
 HTMLElement.prototype.customRender = function(reactElement) {
     let element = document.createElement(reactElement.type);
     element.innerHTML = reactElement.children;
@@ -378,15 +397,19 @@ This JavaScript file defines a custom `customRender` method on the `HTMLElement`
 3. **`mainContainer.customRender(reactElement)`**: This line selects the root container (`#root`) and calls the `customRender` method to render the `reactElement` inside it.
 
 ### Result
+
 When you open the `index.html` file in a web browser, it will render an anchor element with the text "Visit React" that links to the React documentation. This demonstrates a very basic implementation of a custom React-like rendering system using JavaScript.
 
 ### Under the Hood
+
 - Every React JSX components is not valid JavaScript, it is converted by Babel or esbuild into React.createElement calls.
 
 ```JSX
 <a href="https://react.dev" target="_blank">Visit React</a>
 ```
+
 **to ->**
+
 ```javascript
 // as this
 React.createElement(
@@ -409,9 +432,12 @@ const reactElement = {
     children: 'Visit React'
 }
 ```
+
 - The `customRender` method mimics the behavior of React's rendering process by creating an HTML element, setting its attributes, and appending it to the DOM.
 
 ### **`.createElement()`**
+
+## main.jsx
 
 ```JSX
 import { createElement, StrictMode } from 'react'
@@ -440,10 +466,114 @@ createRoot(document.getElementById('root')).render(
   </StrictMode>,
 )
 ```
+
 `reactElement` should be enclosed in curly braces `{}` called as **evaluated expression**, when used inside JSX, as it is a JavaScript expression. otherwise, it will be treated as a string literal.
 
 > Evaluated expressions does not allow to use `if` statements, `for` loops, or any other control flow statements directly inside JSX. Instead, you can use ternary operators or logical operators to conditionally render elements.
 
+---
+---
+
+### Look at this code
+
+## index.html
+
+```html
+<body>
+    <h1>heading
+        <div id="headOne">0</div>
+    </h1>
+    <h2>Counter Value: <span>0</span></h2>
+    <div id="section">
+        <p>demo type paragraph</p>
+        <p>0</p>
+    </div>
+    <ul>
+        <li>this is a list</li>
+        <li class="my-list">0</li>
+    </ul>
+    <h2 class="heading2">0</h2>
 
 
+    <button onClick="randomValue()">Add Value</button>
+    <script src="./customReact.js"></script>
+</body>
+```
 
+Here we have a simple HTML structure with some elements that have text content, and a button that will trigger a function to add a random value to those elements.
+
+We want to update the text content of these elements dynamically using JavaScript.
+
+### Let see how we can do this using simple javascript
+
+## script.js
+
+```javascript
+function randomValue() {
+    const randomNumber = Math.floor(Math.random() * 100);
+    
+    // Update the text content of the elements
+    document.querySelector('#headOne').textContent = randomNumber;
+    document.querySelector('h2 span').textContent = randomNumber;
+    document.querySelector('#section p:nth-child(2)').textContent = randomNumber;
+    document.querySelector('.my-list').textContent = randomNumber;
+    document.querySelector('.heading2').textContent = randomNumber;
+}
+```
+
+This function generates a random number between 0 and 99 and updates the text content of various elements in the HTML document. It uses `querySelector` to select elements based on their IDs, classes, or tag names, and then sets their `textContent` property to the generated random number.
+
+> **Have you noticed** that we are using `querySelector` to select elements and then updating their text content? This is a common pattern in JavaScript for manipulating the DOM.
+
+Limitations:
+- **Performance**: If you have many elements to update, using `querySelector` multiple times can be inefficient. It requires traversing the DOM each time you call it.
+- **Readability**: As the number of elements increases, the code can become less readable and harder to maintain.
+
+---
+
+### Here is how we do it in React
+
+## App.jsx
+
+```javascript
+import { useState } from 'react'
+// import './App.css'
+
+function App() {
+
+  let [counter, setCounter] = useState(0);
+
+  function randomValue() {
+    let randomNumber = Math.floor(Math.random() * 100);
+    counter = randomNumber;
+    setCounter(counter)
+  }
+
+  return (
+    <>
+      <h1>heading
+        <div id="headOne">{counter}</div>
+      </h1>
+      <h2>Counter Value: <span>{counter}</span></h2>
+      <div id="section">
+        <p>demo type paragraph</p>
+        <p>{counter}</p>
+      </div>
+      <ul>
+        <li>this is a list</li>
+        <li className="my-list">{counter}</li>
+      </ul>
+      <h2 className="heading2">{counter}</h2>
+
+      <button onClick={randomValue}>Add Value</button>
+      <script src="./customReact.js"></script>
+    </>
+  )
+}
+
+export default App
+```
+
+### Explanation of App.jsx
+
+This code defines a React functional component called `App`. It uses the `useState` hook to manage a state variable called `counter`, which is initialized to 0.
