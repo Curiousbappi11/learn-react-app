@@ -609,3 +609,162 @@ How React works under the hood, including how it manages state and re-renders co
 Especially the `createRoot()` and `render()` methods also **Reconciliation**, which are crucial for understanding how React updates the UI.
 
 ---
+
+## 📦 Props
+
+Props (short for "properties") are a way to pass data from a parent component to a child component in React. They allow you to customize the behavior and appearance of components by providing them with specific values.
+
+### Example of Props
+
+```javascript
+function Greeting(props) {
+  return (
+    <h1>Hello, {props.name}!</h1>
+  );
+}
+export default Greeting;
+```
+In this example, the `Greeting` component receives a `name` prop and uses it to display a personalized greeting. You can use this component like this:
+
+```javascript
+<Greeting name="John" />
+```
+
+> This will render "Hello, John!" in the UI.
+
+---
+
+### 🔍 Passing Props (Arguments)
+
+In React, **props** (short for "properties") are used to pass data from a parent component to a child component. You can pass any JavaScript value as a prop, including strings, numbers, booleans, arrays, objects, or even functions.
+
+#### 1. Passing Static Values
+
+```jsx
+function Welcome(props) {
+  return <h1>Hello, {props.name}!</h1>;
+}
+
+<Welcome name="Alice" />
+```
+
+#### 2. Passing Expressions
+
+You can pass expressions inside curly braces:
+
+```jsx
+const age = 25;
+<Welcome name={"Bob"} age={age} />
+```
+
+#### 3. Passing Functions as Props
+
+```jsx
+function Button(props) {
+  return <button onClick={props.onClick}>{props.label}</button>;
+}
+
+function App() {
+  const handleClick = () => alert('Clicked!');
+  return <Button onClick={handleClick} label="Click Me" />;
+}
+```
+
+#### 4. Passing Objects or Arrays
+
+```jsx
+function UserDetails({ user }) {
+  return <div>{user.name} - {user.age}</div>;
+}
+
+const userObj = { name: 'Charlie', age: 30 };
+<UserDetails user={userObj} />
+```
+
+#### 5. Passing an Array
+
+```jsx
+function ItemList({ items }) {
+  return (
+    <ul>
+      {items.map((item, index) => (
+        <li key={index}>{item}</li>
+      ))}
+    </ul>
+  );
+}
+
+const fruits = ['Apple', 'Banana', 'Cherry'];
+<ItemList items={fruits} />
+```
+
+#### 6. Destructuring Props
+
+Inside the child component:
+
+```jsx
+function Welcome({ name, age }) {
+  return <h1>{name} is {age} years old.</h1>;
+}
+```
+
+This is cleaner and avoids repeatedly writing `props.`
+
+### Summary
+
+* Use `{}` to pass dynamic expressions.
+* You can pass any JS value.
+* Functions can be used for callbacks.
+* Use destructuring for cleaner code.
+* Arrays can be passed and rendered using `.map()`
+
+Let me know if you want examples specific to functional or class components.
+
+### Explanation of Props
+
+Props are read-only and cannot be modified by the child component. They are passed down from parent to child components, allowing for a unidirectional data flow in React applications. This helps maintain a clear structure and makes it easier to understand how data is being used within the application.
+
+---
+
+### Default Values for Props in React
+
+In React, the modern and recommended way to assign **default values** to props is by using **default parameters through destructuring** in function components. This ensures components behave consistently even if some props are missing.
+
+#### Using Default Parameters in Function Components
+
+```jsx
+function Welcome({ name = "Guest" }) {
+  return <h1>Hello, {name}!</h1>;
+}
+
+<Welcome /> // Output: Hello, Guest!
+```
+
+### Alternate Method: Using Logical OR (not preferred for all cases)
+
+You can also use logical OR (`||`) to provide a fallback, though this happens at runtime:
+
+```jsx
+function Welcome(props) {
+  const name = props.name || "Guest";
+  return <h1>Hello, {name}!</h1>;
+}
+```
+
+**Note**: This treats falsy values like `""` or `0` as undefined, which may not be desired.
+
+### Alternate Method: Ternary Operator (runtime fallback)
+
+```jsx
+function Welcome(props) {
+  return <h1>Hello, {props.name ? props.name : "Guest"}!</h1>;
+}
+```
+
+### Summary
+
+* ✅ Best practice: use destructuring with default parameters.
+* ⚠️ Logical OR and ternary fallbacks work but run during render, not at declaration.
+* ❌ Avoid `defaultProps` in function components — it's outdated.
+
+Let me know if you want to explore runtime type-checking with PropTypes or fallback strategies for specific data types.
